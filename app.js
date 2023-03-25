@@ -19,32 +19,58 @@ mongoose.connection.once('connected', () => {
 
 //        Connection End
 
-// Schema Start
+//            Schema Start
 const userSchema = new mongoose.Schema({
-    userName : String,
-    password : String
+    userName: String,
+    password: String
 })
-// Schema End
+const userProducts = new mongoose.Schema({
+    name: String,
+    price: Number,
+    rating: Number,
+    review: String,
+})
+//            Schema End
 
-// Model Start
-const userModel = new mongoose.model('myUsers',userSchema);
-// Model End 
+//              Model Start
+const userModel = new mongoose.model('Users', userSchema);
+
+const productModel = new mongoose.model('Products', userProducts)
+//              Model End 
 
 app.get('/', (req, res) => {
-    res.status(200).json({msg:'Server has been Started'});    
+    res.status(200).json({ msg: 'Server has been Started' });
 
 })
-app.get('/create',(req,res)=>{
+app.post('/create_user', async (req, res) => {
     const myUser = new userModel({
-        userName:'Sadaan',
-        password:'abc123',
+        userName: req.body.userName,
+        password: req.body.password,
     })
-    console.log(myUser);
-    res.send('It is Create')
+    const output = await myUser.save()
+    console.log(output)
+    res.send(output)
+})
+
+app.post('/create_product', async (req, res) => {
+    const myProducts = new productModel({
+        name: req.body.name,
+        price: req.body.price,
+        rating: req.body.rating,
+        review: req.body.review
+    })
+    const output = await myProducts.save();
+    console.log(output)
+    res.send(output)
 })
 
 
 let port = process.env.PORT || 5000;
-app.listen(port,()=>{
-    console.log(`Server is started at port ${ port }`)
+app.listen(port, () => {
+    console.log(`Server is started at port ${port}`)
 })
+
+// new mongoose.model('myUsers',new mongoose.Schema({
+//     userName : String,
+//     password : String
+// }))

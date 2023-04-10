@@ -5,11 +5,11 @@ const mongoose = require('mongoose')
 const authRoutes = require('./Controllers/authController')
 
 const app = express();
-console.log(authRoutes);
+// console.log(authRoutes);
 app.use('/auth', authRoutes);
 
 require('dotenv').config();
-// console.log(process.env.DB_LINK)
+console.log(process.env.DB_LINK)
 
 
 app.use(cors());
@@ -17,7 +17,7 @@ app.use(express.json());
 
 //        Connection Start
 
-// mongoose.connect(process.env.DB_LINK)
+mongoose.connect(process.env.DB_LINK)
 
 mongoose.connection.on('error', (error) => {
     console.log(error)

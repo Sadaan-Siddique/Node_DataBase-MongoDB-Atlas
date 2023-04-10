@@ -2,17 +2,22 @@ const express = require('express');
 const cors = require('cors')
 const mongoose = require('mongoose')
 
-require('dotenv').config();
-console.log(process.env.DB_LINK)
+const authRoutes = require('./Controllers/authController')
 
 const app = express();
+console.log(authRoutes);
+app.use('/auth', authRoutes);
+
+require('dotenv').config();
+// console.log(process.env.DB_LINK)
+
 
 app.use(cors());
 app.use(express.json());
 
 //        Connection Start
 
-mongoose.connect(process.env.DB_LINK)
+// mongoose.connect(process.env.DB_LINK)
 
 mongoose.connection.on('error', (error) => {
     console.log(error)
@@ -71,6 +76,25 @@ app.get('/get_product', async (req, res) => {
     console.log(output);
     res.status(200).send(output)
 })
+app.get('/get_conditional_product', async (req, res) => {
+    const output = await productModel.find({ rating: 6.7 }).where('price').gt(20).lt(30)
+    // console.log(output)
+    try {
+        res.status(200).json(output);
+    } catch {
+        res.status(500).send('Error Occurred');
+    }
+})
+app.get('/get_pagination_products', async (req, res) => {
+    const output = await productModel.find({}).limit(5);
+    // console.log(output)
+    res.json({ msg: 'Getting Paginating Products', output: output });
+})
+app.get('/get_skipping_pagination_products', async (req, res) => {
+    const output = await productModel.find({}).skip(5).limit(4);
+    // console.log(output)
+    res.json({ msg: 'Getting Skipping Paginating Products', output: output });
+})
 // app.get('/update_product', async (req, res) => {
 //     const output = await productModel.find({ price: 25 })
 //     console.log(typeof (output));
@@ -83,7 +107,18 @@ app.get('/get_product', async (req, res) => {
 //     console.log(output)
 //     res.status(200).json({ output, msg: 'Update Product' });
 // })
-app.get('/update_product',async (req, res) => {
+app.get('/update_product', async (req, res) => {
+    const output = await productModel.findOne({ price: 70 })
+    try {
+        output.name = 'Alkaram'
+        const new_output = await output.save()
+        console.log(new_output)
+        res.send('updating a product')
+    } catch {
+        res.status(500).send('Error Occurred')
+    }
+})
+app.get('/update_products', async (req, res) => {
     await productModel.updateMany({}, { $set: { rating: 6.7 } })
         .then(result => {
             console.log(result);
@@ -121,6 +156,11 @@ app.get('/update_user', async (req, res) => {
     let new_output = await output.save();
     console.log(output);
     res.status(200).json(new_output);
+})
+app.post('/delete_user', async (req, res) => {
+    const output = await userModel.deleteMany({ password: req.body.password })
+    console.log(output);
+    res.status(200).send('Delete_User')
 })
 
 

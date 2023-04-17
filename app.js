@@ -1,7 +1,6 @@
 const express = require('express');
 const cors = require('cors')
 const mongoose = require('mongoose')
-
 const authRoutes = require('./Controllers/authController')
 
 const app = express();
@@ -9,7 +8,7 @@ const app = express();
 app.use('/auth', authRoutes);
 
 require('dotenv').config();
-console.log(process.env.DB_LINK)
+// console.log(process.env.DB_LINK)
 
 
 app.use(cors());

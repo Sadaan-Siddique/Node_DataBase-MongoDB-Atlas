@@ -8,7 +8,7 @@ const jwt = require('jsonwebtoken');
 // const secret_key = '123321'
 // const token = jwt.sign({ username: 'Sadaan' }, secret_key)
 // console.log(token)
-
+    
 // const secret_key = process.env.DB_LINK;
 const secret_key =process.env.SECRET_KEY;
 

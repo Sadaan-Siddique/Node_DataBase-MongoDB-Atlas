@@ -1,15 +1,25 @@
+// const express = require('express');
+// const cors = require('cors')
+// const mongoose = require('mongoose')
+// const authRoutes = require('./Controllers/authController')
+
+// const app = express();
+// // console.log(authRoutes);
+// app.use('/auth', authRoutes);
+
+// // console.log(process.env.DB_LINK)
+
+
+
 const express = require('express');
 const cors = require('cors')
 const mongoose = require('mongoose')
+require('dotenv').config();
 const authRoutes = require('./Controllers/authController')
 
 const app = express();
-// console.log(authRoutes);
+
 app.use('/auth', authRoutes);
-
-require('dotenv').config();
-// console.log(process.env.DB_LINK)
-
 
 app.use(cors());
 app.use(express.json());
@@ -36,9 +46,13 @@ const userSchema = new mongoose.Schema({
     },
     password: {
         type: String,
-        required: true
-    }
+        required: true,
+        // unique: true,
+    },
+
 })
+
+
 const userProducts = new mongoose.Schema({
     name: String,
     price: Number,
@@ -58,6 +72,7 @@ app.get('/', (req, res) => {
 
 })
 
+// Product Start
 
 app.post('/create_product', async (req, res) => {
     const myProducts = new productModel({
@@ -129,19 +144,23 @@ app.get('/update_products', async (req, res) => {
         });
 });
 
+// Product End
+
+
+// User Start
 
 app.post('/create_user', async (req, res) => {
     const myUser = new userModel({
         userName: req.body.userName,
         password: req.body.password,
     })
-    try {
-        const output = await myUser.save()
-        console.log(output)
-        res.status(200).json(output)
-    } catch {
-        res.status(400).send("Error Occurred")
-    }
+    // try {
+    const output = await myUser.save()
+    console.log(output)
+    res.status(200).json(output)
+    // } catch {
+    //     res.status(400).send("Error Occurred")
+    // }
 })
 app.get('/get_user', async (req, res) => {
     const output = await userModel.findOne({ userName: 'Sadaan' })
@@ -162,15 +181,44 @@ app.post('/delete_user', async (req, res) => {
     res.status(200).send('Delete_User')
 })
 
+// User End
 
 
-
-let port = process.env.PORT || 5000;
+let port = process.env.PORT || 4000;
 app.listen(port, () => {
     console.log(`Server is started at port ${port}`)
 })
+
+
+
+
 
 // new mongoose.model('myUsers',new mongoose.Schema({
 //     userName : String,
 //     password : String
 // }))
+
+
+
+
+
+
+// const userSchema = new mongoose.Schema({
+//     password: {
+//         type: String,
+//         required: true,
+//     },
+//     userName: {
+//         type: String,
+//         required: true,
+//         unique: true,
+//         index: { unique: true, dropDups: true },
+//     },
+// })
+
+// db.users.dropIndex({ userName: 1 })
+
+// User.findOneAndUpdate({ userName: "Laila" }, { password: "newPassword" }, { new: true }, function (err, doc) {
+//     if (err) return handleError(err);
+//     console.log(doc);
+// });

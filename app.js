@@ -10,11 +10,11 @@
 // // console.log(process.env.DB_LINK)
 
 
-
 const express = require('express');
 const cors = require('cors')
 const mongoose = require('mongoose')
 require('dotenv').config();
+// console.log(process.env.DB_LINK);
 const authRoutes = require('./Controllers/authController')
 
 const app = express();

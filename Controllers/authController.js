@@ -3,7 +3,7 @@
 // const jwt = require('jsonwebtoken')
 // const secret_key = '123321'
 // const token = jwt.sign({name:'Sadaan'},secret_key)
- 
+
 // router.use(express.json());
 
 // router.get('/products',(req,res)=>{
@@ -28,10 +28,12 @@ const router = express.Router();
 
 router.post('/login', (req, res) => {
   // handle login logic
+  res.status(200).send('This is Login')
 });
 
-router.post('/register', (req, res) => {
+router.get('/register', (req, res) => {
   // handle registration logic
+  res.status(200).send('This is register')
 });
 
 module.exports = router;

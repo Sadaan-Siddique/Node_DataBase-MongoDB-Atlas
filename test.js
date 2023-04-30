@@ -1,5 +1,5 @@
 const test = require('./test2')
-test.funcFive()
+test();
 require('dotenv').config();
 console.log(process.env.SECRET_KEY)
 

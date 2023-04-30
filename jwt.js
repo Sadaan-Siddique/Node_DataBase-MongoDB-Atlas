@@ -129,7 +129,8 @@ app.post('/login', async (req, res) => {
 app.get('/shirtProducts', validation, (req, res) => {
     try {
         console.log(req.headers)
-        res.status(200).send('Response of Shirts !')
+        console.log(req.headers.msg)
+        res.status(200).json({decoded:req.headers.decodedObj,msg:'Response of Shirts !'})
     } catch {
         res.status(404).send("Error Occurred")
     }
@@ -140,9 +141,14 @@ function validation(req, res, next) {
         if (req.headers['x-access-token']) {
             const token = req.headers['x-access-token'];
             try {
-                const decoded = jwt.verify(token, secret_key)
+                const decoded = jwt.verify(token, secret_key);
                 if (decoded) {
-                    console.log(decoded)
+                    // console.log(decoded)
+                    // console.log(req.headers)
+                    req.headers.decodedObj = decoded;
+                    req.headers['msg'] = 'first';
+                    // req.headers.msg = 'second'
+                    // console.log(req.headers.decodedObj)
                     next()
                 } else {
                     res.status(498).send('Invalid Token')
